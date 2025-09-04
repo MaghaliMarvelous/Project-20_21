@@ -1,32 +1,25 @@
 import 'package:get/get.dart';
-
-class Todo {
-  String title;
-  bool isDone;
-
-  Todo({
-    required this.title,
-    this.isDone = false,
-  });
-}
+import '../models/todo.dart';
 
 class TodoController extends GetxController {
   var todos = <Todo>[].obs;
 
-  void tambah(String title) {
-    todos.add(Todo(title: title));
+  void addTodo(String title, String description, String category) {
+    todos.add(Todo(
+      title: title,
+      description: description,
+      category: category,
+    ));
   }
 
-  void selesai(int index) {
-    if (index >= 0 && index < todos.length) {
-      todos[index].isDone = !todos[index].isDone;
-      todos.refresh();
-    }
+  void markDone(int index) {
+    todos[index].isDone = true;
+    todos.refresh(); 
   }
 
-  void hapus(int index) {
-    if (index >= 0 && index < todos.length) {
-      todos.removeAt(index);
-    }
+  void deleteTodo(int index) {
+    todos.removeAt(index);
   }
+
+  List<Todo> get history => todos.where((t) => t.isDone).toList();
 }
