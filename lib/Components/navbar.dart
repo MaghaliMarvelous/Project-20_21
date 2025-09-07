@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
+import '../pages/dashboard_page.dart';
+import '../pages/history_page.dart';
+import '../pages/profile_page.dart';
 import '../models/todo.dart';
-import 'dashboard_page.dart';
-import 'history_page.dart';
-import 'profile_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class BottomNavPage extends StatefulWidget {
+  const BottomNavPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<BottomNavPage> createState() => _BottomNavPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _BottomNavPageState extends State<BottomNavPage> {
   int _selectedIndex = 0;
 
-  // ✅ Shared state
+  // ✅ Shared state here
   final List<Todo> todos = [];
   final List<Todo> history = [];
 
@@ -53,9 +53,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        selectedItemColor: Colors.pink,   
-        unselectedItemColor: Colors.grey, 
         currentIndex: _selectedIndex,
         onTap: (index) {
           setState(() {
@@ -63,18 +60,9 @@ class _HomePageState extends State<HomePage> {
           });
         },
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: "Dashboard",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: "History",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile",
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: "Dashboard"),
+          BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
       ),
     );
