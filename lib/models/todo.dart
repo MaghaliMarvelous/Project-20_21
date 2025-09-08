@@ -1,7 +1,7 @@
 class Todo {
-  String title;
-  String description;
-  String category;
+  final String title;
+  final String description;
+  final String category;
   bool isDone;
 
   Todo({
