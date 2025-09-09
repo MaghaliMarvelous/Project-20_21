@@ -5,12 +5,12 @@ class AuthController extends GetxController {
   var isLoggedIn = false.obs;
   var userEmail = "".obs;
 
-  Future<bool> login(String email, String password) async {
+  bool login(String email, String password) {
     if (email == "migel" && password == "kaoskutank") {
       isLoggedIn.value = true;
       userEmail.value = email;
 
-      Get.offAll(() => const HomePage());
+      Get.offAll(() => HomePage());
       return true;
     }
     return false;

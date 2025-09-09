@@ -10,6 +10,9 @@ class LoginPage extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
 
   LoginPage({super.key});
+  
+
+
 
   void _handleLogin() async {
   final email = emailController.text.trim();
@@ -28,7 +31,7 @@ class LoginPage extends StatelessWidget {
     return;
   }
 
-  final success = await authController.login(email, password);
+  final success = authController.login(email, password);
   if (!success) {
     Get.snackbar(
       "Login Failed",
