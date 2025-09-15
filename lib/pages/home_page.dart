@@ -11,26 +11,30 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(HomeController());
+    final PageController pageController = PageController();
 
     return Obx(() {
-      Widget body;
-      switch (controller.selectedIndex.value) {
-        case 0:
-          body = const DashboardPage(); // todo handled inside DashboardPage
-          break;
-        case 1:
-          body = const HistoryPage();   // history handled inside HistoryPage
-          break;
-        case 2:
-        default:
-          body = const ProfilePage();
-      }
-
       return Scaffold(
-        body: body,
+        body: PageView(
+          controller: pageController,
+          onPageChanged: (index) {
+            controller.setIndex(index);
+          },
+          children: const [
+            DashboardPage(),
+            HistoryPage(),
+            ProfilePage(),
+          ],
+        ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: controller.selectedIndex.value,
-          onTap: controller.setIndex,
+          onTap: (index) {
+            controller.setIndex(index);
+            pageController.jumpToPage(index); // langsung pindah (tanpa animasi)
+            // kalau mau animasi halus:
+            pageController.animateToPage(index,
+                duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+          },
           selectedItemColor: Colors.pink,
           unselectedItemColor: Colors.grey,
           items: const [
