@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'login_page.dart'; // pastikan import login page
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -18,6 +20,14 @@ class ProfilePage extends StatelessWidget {
           ),
         ),
         iconTheme: const IconThemeData(color: Colors.pinkAccent),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.pinkAccent),
+            onPressed: () {
+              _showLogoutWarning(context);
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Row(
@@ -25,25 +35,11 @@ class ProfilePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             buildProfile(
-              "assets/Octopus dude.jpg",
-              "Maghali Arka Nugraha",
-              "Absen 20 11 PPLG 1",
+              "https://i.pinimg.com/736x/5f/1f/1b/5f1f1be3493ee6eab6744373a109d308.jpg",
+              "Migel",
+              "Absen 20 dan 21 11 PPLG 1",
               const Icon(Icons.piano,
-                  color: Colors.pinkAccent, size: 28), 
-            ),
-            buildProfile(
-              "assets/Kucing El.jpg",
-              "Maximillian Mikhael Prabowo",
-              "Absen 21 11 PPLG 1",
-              Image.network(
-                "https://cdn-icons-png.flaticon.com/512/3011/3011376.png", 
-                height: 28,
-                width: 28,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(Icons.queue_music,
-                      color: Colors.pinkAccent, size: 28); // fallback
-                },
-              ),
+                  color: Colors.pinkAccent, size: 28),
             ),
           ],
         ),
@@ -51,14 +47,43 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+
+  void _showLogoutWarning(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Logout"),
+        content: const Text("Are you sure you want to logout?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop(); // tutup dialog
+            },
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop(); 
+              Get.offAll(() => LoginPage());
+            },
+            child: const Text(
+              "Logout",
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget buildProfile(
-      String assetPath, String name, String description, Widget icon) {
+      String imageUrl, String name, String description, Widget icon) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         CircleAvatar(
           radius: 50,
-          backgroundImage: AssetImage(assetPath),
+          backgroundImage: NetworkImage(imageUrl),
         ),
         const SizedBox(height: 10),
         Text(

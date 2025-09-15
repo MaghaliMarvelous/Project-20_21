@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'controllers/auth_controller.dart';
+import 'controllers/home_controller.dart';
+import 'controllers/dashboard_controller.dart';
 import 'pages/login_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -16,6 +18,8 @@ class MyApp extends StatelessWidget {
       title: "ToDo App",
       initialBinding: BindingsBuilder(() {
         Get.lazyPut<AuthController>(() => AuthController());
+        Get.lazyPut<HomeController>(() => HomeController());
+        Get.put<DashboardController>(DashboardController(), permanent: true);
       }),
       home: LoginPage(),
     );
