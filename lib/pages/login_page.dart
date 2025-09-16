@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/auth_controller.dart';
-import '../components/input_field.dart';
-import '../components/primary_button.dart';
+import '../Components/input_field.dart';
+import '../Components/primary_button.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final AuthController authController = Get.put(AuthController());
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  LoginPage({super.key});
+  bool _obscurePassword = true;
 
-  void _handleLogin() async {
+  void _handleLogin() {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
 
@@ -48,15 +55,16 @@ class LoginPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Illustration
               SizedBox(
-                    height: 200,
-                    child: Image.asset(
-                      "assets/Pink Guitar.png",
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+                height: 200,
+                child: Image.asset(
+                  "assets/Pink Guitar.png",
+                  fit: BoxFit.contain,
+                ),
+              ),
               const SizedBox(height: 30),
+
+              // Username
               InputField(
                 controller: emailController,
                 hintText: "Username",
@@ -64,22 +72,21 @@ class LoginPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              // Password
               InputField(
                 controller: passwordController,
                 hintText: "Password",
                 icon: Icons.lock_outline,
-                obscure: true,
+                obscure: _obscurePassword,
+                showToggle: true,
+                onToggleObscure: () {
+                  setState(() {
+                    _obscurePassword = !_obscurePassword;
+                  });
+                },
               ),
-              const SizedBox(height: 12),
-            
-              const SizedBox(height: 10),
-
-              // Login button
-              PrimaryButton(label: "Login", onPressed: _handleLogin),
               const SizedBox(height: 20),
 
-          
+              PrimaryButton(label: "Login", onPressed: _handleLogin),
             ],
           ),
         ),

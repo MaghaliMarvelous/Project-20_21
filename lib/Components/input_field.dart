@@ -5,6 +5,8 @@ class InputField extends StatelessWidget {
   final String hintText;
   final IconData icon;
   final bool obscure;
+  final bool showToggle;
+  final VoidCallback? onToggleObscure;
 
   const InputField({
     super.key,
@@ -12,6 +14,8 @@ class InputField extends StatelessWidget {
     required this.hintText,
     required this.icon,
     this.obscure = false,
+    this.showToggle = false,
+    this.onToggleObscure,
   });
 
   @override
@@ -29,6 +33,15 @@ class InputField extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
+        suffixIcon: showToggle
+            ? IconButton(
+                icon: Icon(
+                  obscure ? Icons.visibility_off : Icons.visibility,
+                  color: Colors.grey,
+                ),
+                onPressed: onToggleObscure,
+              )
+            : null,
       ),
     );
   }
