@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/dashboard_controller.dart';
+import '../controllers/history_controller.dart';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<DashboardController>();
+    final controller = Get.find<HistoryController>();
 
     return Obx(() {
       final history = controller.history;
@@ -27,7 +27,6 @@ class HistoryPage extends StatelessWidget {
           ),
           iconTheme: const IconThemeData(color: Colors.pinkAccent),
           actions: [
-            // tombol select
             IconButton(
               icon: Icon(
                 controller.isSelectionMode.value
@@ -54,7 +53,7 @@ class HistoryPage extends StatelessWidget {
                 icon: const Icon(Icons.delete, color: Colors.red),
                 onPressed: controller.selectedItems.isEmpty
                     ? null
-                    : () => controller.removeSelectedFromHistory(),
+                    : controller.removeSelectedFromHistory,
               ),
           ],
         ),
