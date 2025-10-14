@@ -5,9 +5,9 @@ import 'history_controller.dart';
 class DashboardController extends GetxController {
   var todos = <Todo>[].obs;
 
-  void addTodo(Todo todo) {
-    todos.add(todo);
-  }
+  void addTodo(Todo todo) => todos.add(todo);
+
+  void editTodo(int index, Todo updatedTodo) => todos[index] = updatedTodo;
 
   void toggleDone(int index) {
     todos[index].isDone = !todos[index].isDone;
@@ -15,9 +15,9 @@ class DashboardController extends GetxController {
   }
 
   void delete(int index) {
-    final removed = todos.removeAt(index);
-    // kirim ke HistoryController
-    final historyController = Get.find<HistoryController>();
-    historyController.addToHistory(removed);
+    final deleted = todos.removeAt(index);
+    if (Get.isRegistered<HistoryController>()) {
+      Get.find<HistoryController>().addToHistory(deleted);
+    }
   }
 }

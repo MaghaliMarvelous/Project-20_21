@@ -6,15 +6,9 @@ class HistoryController extends GetxController {
   var isSelectionMode = false.obs;
   var selectedItems = <int>[].obs;
 
-  void addToHistory(Todo todo) {
-    history.add(todo);
-  }
-
   void toggleSelectionMode() {
     isSelectionMode.value = !isSelectionMode.value;
-    if (!isSelectionMode.value) {
-      selectedItems.clear();
-    }
+    selectedItems.clear();
   }
 
   void toggleItemSelection(int index) {
@@ -28,11 +22,13 @@ class HistoryController extends GetxController {
   void removeSelectedFromHistory() {
     selectedItems.sort((a, b) => b.compareTo(a));
     for (var index in selectedItems) {
-      if (index >= 0 && index < history.length) {
-        history.removeAt(index);
-      }
+      history.removeAt(index);
     }
     selectedItems.clear();
     isSelectionMode.value = false;
+  }
+
+  void addToHistory(Todo todo) {
+    history.add(todo);
   }
 }

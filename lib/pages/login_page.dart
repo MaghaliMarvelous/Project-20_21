@@ -18,37 +18,40 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _obscurePassword = true;
 
-  void _handleLogin() {
-    final email = emailController.text.trim();
-    final password = passwordController.text.trim();
+  void _handleLogin() async {
+  final email = emailController.text.trim();
+  final password = passwordController.text.trim();
 
-    if (email.isEmpty || password.isEmpty) {
-      Get.snackbar(
-        "Error",
-        "Email and Password cannot be empty",
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      return;
-    }
-
-    final success = authController.login(email, password);
-    if (!success) {
-      Get.snackbar(
-        "Login Failed",
-        "Invalid email or password",
-        backgroundColor: Colors.redAccent,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    }
+  if (email.isEmpty || password.isEmpty) {
+    Get.snackbar(
+      "Error",
+      "Email and Password cannot be empty",
+      backgroundColor: Colors.redAccent,
+      colorText: Colors.white,
+      snackPosition: SnackPosition.BOTTOM,
+    );
+    return;
   }
+
+  final success = await authController.login(email, password); 
+  if (!success) {
+    Get.snackbar(
+      "Login Failed",
+      "Invalid email or password",
+      backgroundColor: Colors.redAccent,
+      colorText: Colors.white,
+      snackPosition: SnackPosition.BOTTOM,
+    );
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
+    
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -60,6 +63,9 @@ class _LoginPageState extends State<LoginPage> {
                 child: Image.asset(
                   "assets/Pink Guitar.png",
                   fit: BoxFit.contain,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : null, // optional: invert for dark mode
                 ),
               ),
               const SizedBox(height: 30),
@@ -69,6 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                 controller: emailController,
                 hintText: "Username",
                 icon: Icons.person_outline,
+                borderColor: Theme.of(context).dividerColor,
               ),
               const SizedBox(height: 16),
 
@@ -83,10 +90,16 @@ class _LoginPageState extends State<LoginPage> {
                     _obscurePassword = !_obscurePassword;
                   });
                 },
+                borderColor: Theme.of(context).dividerColor,
               ),
               const SizedBox(height: 20),
 
-              PrimaryButton(label: "Login", onPressed: _handleLogin),
+              PrimaryButton(
+                label: "Login",
+                onPressed: _handleLogin,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                textColor: Colors.white,
+              ),
             ],
           ),
         ),
