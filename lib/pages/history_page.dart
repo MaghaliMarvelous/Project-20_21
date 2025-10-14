@@ -1,114 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/history_controller.dart';
+import '../controllers/history_layout_controller.dart';
+import 'package:flutter_project_20_21_ulangan/mobile/history_mobile.dart';
+import 'package:flutter_project_20_21_ulangan/widescreen/history_widescreen.dart';
 
 class HistoryPage extends StatelessWidget {
-  const HistoryPage({super.key});
+  HistoryPage({super.key});
+  final layoutController = Get.put(HistoryLayoutController());
+  final historyController = Get.put(HistoryController());
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<HistoryController>();
-
-    return Obx(() {
-      final history = controller.history;
-
-      return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          centerTitle: true,
-          title: const Text(
-            "History",
-            style: TextStyle(
-              color: Colors.pinkAccent,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          iconTheme: const IconThemeData(color: Colors.pinkAccent),
-          actions: [
-            IconButton(
-              icon: Icon(
-                controller.isSelectionMode.value
-                    ? Icons.close
-                    : Icons.check_box_outlined,
-                color: Colors.pinkAccent,
-              ),
-              onPressed: () {
-                if (history.isEmpty) {
-                  Get.snackbar(
-                    "No History",
-                    "There are no todos to select.",
-                    backgroundColor: Colors.redAccent,
-                    colorText: Colors.white,
-                    snackPosition: SnackPosition.BOTTOM,
-                  );
-                } else {
-                  controller.toggleSelectionMode();
-                }
-              },
-            ),
-            if (controller.isSelectionMode.value)
-              IconButton(
-                icon: const Icon(Icons.delete, color: Colors.red),
-                onPressed: controller.selectedItems.isEmpty
-                    ? null
-                    : controller.removeSelectedFromHistory,
-              ),
-          ],
-        ),
-        body: history.isEmpty
-            ? const Center(
-                child: Text(
-                  "No deleted todos yet.",
-                  style: TextStyle(color: Colors.pinkAccent),
-                ),
-              )
-            : ListView.builder(
-                padding: const EdgeInsets.all(12),
-                itemCount: history.length,
-                itemBuilder: (context, index) {
-                  final todo = history[index];
-                  final isSelected =
-                      controller.selectedItems.contains(index);
-
-                  return Card(
-                    color: isSelected ? Colors.pink[50] : Colors.white,
-                    elevation: 2,
-                    margin: const EdgeInsets.symmetric(vertical: 6),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ListTile(
-                      leading: controller.isSelectionMode.value
-                          ? Checkbox(
-                              value: isSelected,
-                              activeColor: Colors.pinkAccent,
-                              onChanged: (_) =>
-                                  controller.toggleItemSelection(index),
-                            )
-                          : const Icon(Icons.history,
-                              color: Colors.pinkAccent),
-                      title: Text(
-                        todo.title,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.lineThrough,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      subtitle: Text(
-                        "${todo.description} • ${todo.category}",
-                        style: const TextStyle(color: Colors.black54),
-                      ),
-                      onTap: controller.isSelectionMode.value
-                          ? () => controller.toggleItemSelection(index)
-                          : null,
-                    ),
-                  );
-                },
-              ),
-      );
-    });
+    return Scaffold(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          layoutController.updateLayout(constraints);
+          return Obx(() => layoutController.isMobile.value
+              ? const HistoryMobile()
+              : const HistoryWidescreen());
+        },
+      ),
+    );
   }
 }

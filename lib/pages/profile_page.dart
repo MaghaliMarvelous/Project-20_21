@@ -1,52 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'login_page.dart'; // pastikan import login page
+import '../controllers/theme_controller.dart';
+import 'login_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeController = Get.find<ThemeController>();
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
+        title: Text(
           "Profile",
           style: TextStyle(
-            color: Colors.pinkAccent,
+            color: Theme.of(context).colorScheme.secondary,
             fontWeight: FontWeight.bold,
           ),
         ),
-        iconTheme: const IconThemeData(color: Colors.pinkAccent),
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.secondary),
         actions: [
+          Obx(() => Switch(
+                value: themeController.isDark.value,
+                activeColor: Colors.pinkAccent,
+                onChanged: (_) => themeController.toggleTheme(),
+              )),
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.pinkAccent),
-            onPressed: () {
-              _showLogoutWarning(context);
-            },
+            onPressed: () => _showLogoutWarning(context),
           ),
         ],
       ),
       body: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             buildProfile(
+              context,
               "https://i.pinimg.com/736x/5f/1f/1b/5f1f1be3493ee6eab6744373a109d308.jpg",
               "Migel",
               "Absen 20 dan 21 11 PPLG 1",
-              const Icon(Icons.piano,
-                  color: Colors.pinkAccent, size: 28),
+              Icon(Icons.piano,
+                  color: Theme.of(context).colorScheme.secondary, size: 28),
             ),
           ],
         ),
       ),
     );
   }
-
 
   void _showLogoutWarning(BuildContext context) {
     showDialog(
@@ -56,28 +60,23 @@ class ProfilePage extends StatelessWidget {
         content: const Text("Are you sure you want to logout?"),
         actions: [
           TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop(); // tutup dialog
-            },
+            onPressed: () => Navigator.of(ctx).pop(),
             child: const Text("Cancel"),
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(ctx).pop(); 
-              Get.offAll(() => LoginPage());
+              Navigator.of(ctx).pop();
+              Get.offAll(() => const LoginPage());
             },
-            child: const Text(
-              "Logout",
-              style: TextStyle(color: Colors.red),
-            ),
+            child: const Text("Logout", style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
     );
   }
 
-  Widget buildProfile(
-      String imageUrl, String name, String description, Widget icon) {
+  Widget buildProfile(BuildContext context, String imageUrl, String name,
+      String description, Widget icon) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -88,11 +87,18 @@ class ProfilePage extends StatelessWidget {
         const SizedBox(height: 10),
         Text(
           name,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).textTheme.bodyLarge?.color,
+          ),
         ),
         Text(
           description,
-          style: const TextStyle(fontSize: 14, color: Colors.grey),
+          style: TextStyle(
+            fontSize: 14,
+            color: Theme.of(context).textTheme.bodyMedium?.color,
+          ),
         ),
         const SizedBox(height: 8),
         icon,
