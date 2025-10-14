@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_project_20_21_ulangan/pages/dashboard_page.dart';
 import 'profile_page.dart';
 import 'history_page.dart';
-import 'login_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
