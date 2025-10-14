@@ -60,7 +60,7 @@ class ProfileMobile extends StatelessWidget {
             const SizedBox(height: 30),
             buildProfileCard(
               context,
-              "https://i.pinimg.com/736x/2f/3f/4b/2f3f4b9e4e3e4e2e9a3e3e3e3e3e3e3e.jpg",
+              "https://i.pinimg.com/736x/e4/0c/01/e40c01326bfa4ae9fb425c6d3236e5c2.jpg",
               "Maximillian Mikhael Prabowo",
               "Absen 21\nXI PPLG 1",
               Icons.palette,

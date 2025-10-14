@@ -1,72 +1,109 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import '../models/todo.dart';
 
 class DBHelper {
   static final DBHelper _instance = DBHelper._internal();
   factory DBHelper() => _instance;
   DBHelper._internal();
 
-  static Database? _database;
+  static Database? _db;
 
-
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDb();
-    return _database!;
+  Future<Database> get db async {
+    if (_db != null) return _db!;
+    _db = await _initDb();
+    return _db!;
   }
 
   Future<Database> _initDb() async {
     final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'contacts.db');
-
+    final path = join(dbPath, 'todo_list.db');
 
     return await openDatabase(
       path,
       version: 1,
       onCreate: (db, version) async {
         await db.execute('''
-          CREATE TABLE contacts(
+          CREATE TABLE todos(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL
+            title TEXT,
+            description TEXT,
+            category TEXT,
+            startTime TEXT,
+            endTime TEXT,
+            isDone INTEGER
           )
         ''');
       },
     );
   }
 
-
-  Future<int> insertName(String name) async {
-    final db = await database;
-    return await db.insert('contacts', {'name': name});
+  Future<int> insertTodo(Todo todo) async {
+    final client = await db;
+    return await client.insert('todos', {
+      'title': todo.title,
+      'description': todo.description,
+      'category': todo.category,
+      'startTime': todo.startTime,
+      'endTime': todo.endTime,
+      'isDone': todo.isDone ? 1 : 0,
+    });
   }
 
+  Future<List<Todo>> getTodos() async {
+    final client = await db;
+    final maps = await client.query('todos', orderBy: 'id DESC');
 
-  Future<List<Map<String, dynamic>>> getNames() async {
-    final db = await database;
-    return await db.query('contacts', orderBy: 'id DESC');
+    return maps.map((map) => Todo(
+      id: map['id'] as int,
+      title: map['title'] as String,
+      description: map['description'] as String,
+      category: map['category'] as String,
+      startTime: map['startTime'] as String,
+      endTime: map['endTime'] as String,
+      isDone: (map['isDone'] as int) == 1,
+    )).toList();
   }
 
+  Future<int> updateTodo(Todo todo) async {
+  final client = await db;
+  return await client.update(
+    'todos',
+    {
+      'title': todo.title,
+      'description': todo.description,
+      'category': todo.category,
+      'startTime': todo.startTime,
+      'endTime': todo.endTime,
+      'isDone': todo.isDone ? 1 : 0,
+    },
+    where: 'id = ?',
+    whereArgs: [todo.id],
+  );
+}
 
-  Future<int> deleteById(int id) async {
-    final db = await database;
-    return await db.delete('contacts', where: 'id = ?', whereArgs: [id]);
-  }
 
-
-  Future<int> updateById(int id, String newName) async {
-    final db = await database;
-    return await db.update(
-      'contacts',
-      {'name': newName},
+  Future<int> deleteTodo(int id) async {
+    final client = await db;
+    return await client.delete(
+      'todos',
       where: 'id = ?',
       whereArgs: [id],
     );
   }
 
+  Future<int> updateTodoDoneStatus(int id, bool isDone) async {
+    final client = await db;
+    return await client.update(
+      'todos',
+      {'isDone': isDone ? 1 : 0},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 
   Future<void> closeDb() async {
-    final db = await database;
-    await db.close();
-    _database = null;
+    final client = await db;
+    await client.close();
   }
 }
