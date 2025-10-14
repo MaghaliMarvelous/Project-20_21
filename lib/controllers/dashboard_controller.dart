@@ -1,8 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/todo.dart';
 import 'history_controller.dart';
 
 class DashboardController extends GetxController {
+
+   var isMobile = true.obs;
+
+  void updateLayout(BoxConstraints constraints) {
+    isMobile.value = constraints.maxWidth < 600;
+  }
   var todos = <Todo>[].obs;
 
   void addTodo(Todo todo) => todos.add(todo);

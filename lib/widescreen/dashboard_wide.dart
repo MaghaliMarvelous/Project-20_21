@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/todo.dart';
 import '../controllers/dashboard_controller.dart';
-import 'add_todo_page.dart';
+import '../pages/add_todo_page.dart';
 
 class DashboardWidePage extends StatelessWidget {
   const DashboardWidePage({super.key});

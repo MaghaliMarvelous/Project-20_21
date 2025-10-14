@@ -1,7 +1,7 @@
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
-class DashboardLayoutController extends GetxController {
+class ProfileController extends GetxController {
   var isMobile = true.obs;
 
   void updateLayout(BoxConstraints constraints) {

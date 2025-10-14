@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project_20_21_ulangan/pages/splashscreen_page.dart';
 import 'package:get/get.dart';
 import 'controllers/theme_controller.dart';
 import 'pages/login_page.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
           darkTheme: ThemeData.dark(),
           themeMode:
               themeController.isDark.value ? ThemeMode.dark : ThemeMode.light,
-          home: const LoginPage(), 
+          home: const SplashScreenPage(), 
         ));
   }
 }

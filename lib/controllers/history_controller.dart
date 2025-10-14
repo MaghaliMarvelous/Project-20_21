@@ -1,7 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/todo.dart';
 
 class HistoryController extends GetxController {
+  var isMobile = true.obs;
+
+  void updateLayout(BoxConstraints constraints) {
+    isMobile.value = constraints.maxWidth < 600;
+  }
+
   var history = <Todo>[].obs;
   var isSelectionMode = false.obs;
   var selectedItems = <int>[].obs;

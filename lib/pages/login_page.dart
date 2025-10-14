@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
               PrimaryButton(
                 label: "Login",
                 onPressed: _handleLogin,
-                backgroundColor: Theme.of(context).colorScheme.secondary,
+                backgroundColor: Colors.pink,
                 textColor: Colors.white,
               ),
             ],

@@ -1,51 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'dashboard_page.dart';
-import 'history_page.dart';
+import 'package:flutter_project_20_21_ulangan/pages/dashboard_page.dart';
 import 'profile_page.dart';
-import '../controllers/home_controller.dart';
-import '../controllers/history_controller.dart'; 
+import 'history_page.dart';
+import 'login_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final controller = Get.put(HomeController());
-    final historyController = Get.put(HistoryController()); 
-    final PageController pageController = PageController();
+  State<HomePage> createState() => _HomePageState();
+}
 
-    return Obx(() {
-      return Scaffold(
-        body: PageView(
-          controller: pageController,
-          onPageChanged: controller.setIndex,
-          physics: const BouncingScrollPhysics(),
-          children:  [
-            DashboardPage(),
-            HistoryPage(),
-            ProfilePage(),
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: controller.selectedIndex.value,
-          onTap: (index) {
-            controller.setIndex(index);
-            pageController.animateToPage(
-              index,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          },
-          selectedItemColor: Colors.pink,
-          unselectedItemColor: Colors.grey,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: "Dashboard"),
-            BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-          ],
-        ),
+class _HomePageState extends State<HomePage> {
+  final PageController _pageController = PageController();
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages =  [
+    DashboardPage(),
+    HistoryPage(),
+    ProfilePage(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _pageController.animateToPage(
+        index,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
       );
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: PageView(
+        controller: _pageController,
+        children: _pages,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.pink,
+        unselectedItemColor: Colors.grey,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Dashboard'),
+          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+      ),
+    );
   }
 }
