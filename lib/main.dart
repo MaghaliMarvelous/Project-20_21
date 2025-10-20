@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'controllers/theme_controller.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   Get.put(ThemeController());
   runApp(const MyApp());
 }
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
           darkTheme: ThemeData.dark(),
           themeMode:
               themeController.isDark.value ? ThemeMode.dark : ThemeMode.light,
-          home: const SplashScreenPage(), 
+          home: const SplashScreenPage(),
         ));
   }
 }

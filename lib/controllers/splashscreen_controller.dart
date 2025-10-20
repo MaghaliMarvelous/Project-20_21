@@ -1,9 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_project_20_21_ulangan/pages/login_page.dart';
-import 'package:get/get.dart';
 import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../pages/home_page.dart';
+import '../pages/login_page.dart';
 
-class SplashScreenController extends GetxController with GetSingleTickerProviderStateMixin {
+class SplashScreenController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   late AnimationController animationController;
   late Animation<double> fadeAnimation;
   late Animation<double> scaleAnimation;
@@ -12,6 +15,7 @@ class SplashScreenController extends GetxController with GetSingleTickerProvider
   void onInit() {
     super.onInit();
 
+    // 🔹 Setup animasi
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
@@ -27,8 +31,16 @@ class SplashScreenController extends GetxController with GetSingleTickerProvider
 
     animationController.forward();
 
-    Timer(const Duration(seconds: 3), () {
-      Get.off(() => const LoginPage());  
+    // 🔹 Setelah animasi selesai, cek login
+    Timer(const Duration(seconds: 3), () async {
+      final prefs = await SharedPreferences.getInstance();
+      final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+      if (isLoggedIn) {
+        Get.offAll(() => const HomePage()); // langsung ke Home kalau sudah login
+      } else {
+        Get.offAll(() => const LoginPage()); // kalau belum, ke Login
+      }
     });
   }
 
